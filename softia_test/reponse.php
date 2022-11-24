@@ -13,14 +13,16 @@ catch(Exception $e)
 
 // Si tout va bien, on peut continuer
 
-// On récupère tout le contenu de la table
-
+// On récupère tout les nom de la table étudiant
 $sqlQuery = 'SELECT nom,prenom FROM etudiant';
 $recipesStatement = $mysqlClient->prepare($sqlQuery);
 $recipesStatement->execute();
 $name = $recipesStatement->fetchAll();
 
-
+$sqlQuery = 'SELECT * FROM etudiant';
+$recipesStatement = $mysqlClient->prepare($sqlQuery);
+$recipesStatement->execute();
+$idEtuiant = $recipesStatement->fetchAll();
 
 $sqlQuery = 'SELECT convention.nom FROM convention inner join etudiant on etudiant.id_convention = convention.id where etudiant.id_convention = convention.id';
 $recipesS = $mysqlClient->prepare($sqlQuery);
@@ -40,7 +42,7 @@ $nameConvention = $recipesS->fetchAll();
 <?php
         					foreach ($nameConvention as $nm) {
 								?>
-										<p><?php echo 'Test affichage ', $nm; ?></p>
+										<p><?php echo 'Test affichage ', $nm[0]; ?></p>
 								<?php
 								}
 							?>
@@ -50,6 +52,7 @@ $nameConvention = $recipesS->fetchAll();
 
 
 <form action="reponse.php" method="post">
+
     <div class="mb-3">
 				<select class="form-select" name="name_student" aria-label="Default select example">
 				<option >Selectionner l'étudiant</option>
@@ -83,6 +86,10 @@ $nameConvention = $recipesS->fetchAll();
  
     echo 'Bonjour', ' ',$_POST['name_student'];
     echo $messageBdd;
+
+    
+  
+
     $mysqlClient->query("INSERT INTO `attestion` VALUES (1,2,1,'$messageBdd')");
 
     }
